@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}All Notes{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="page-header-inner">
+        <div>
+            <div class="hero-eyebrow">
+                <span class="eyebrow-dot"></span>
+                Your Notes Collection
+            </div>
+            <h1 class="page-title">
+                All Notes
+                <span class="count-badge">{{ note_count }}</span>
+            </h1>
+            <p class="page-subtitle">All your saved notes in one place. Click delete to remove any note.</p>
+        </div>
+        <a href="/" class="btn-new-note">
+            <i class="bi bi-plus-lg"></i> Add New Note
+        </a>
+    </div>
+</section>
+
+<section class="notes-section">
+    {% if notes %}
+    <div class="notes-grid">
+        {% for note in notes %}
+        <div class="note-card" style="--delay: {{ loop.index0 * 0.08 }}s">
+            <div class="note-card-top">
+                <span class="category-badge cat-{{ note.category | lower | replace(' ', '-') }}">
+                    {% if note.category == 'Study' %}📚
+                    {% elif note.category == 'Work' %}💼
+                    {% elif note.category == 'Ideas' %}💡
+                    {% elif note.category == 'Personal' %}🧠
+                    {% else %}📝{% endif %}
+                    {{ note.category }}
+                </span>
+                <span class="note-number">#{{ '%02d' % (loop.index) }}</span>
+            </div>
+
+            <h3 class="note-title">{{ note.title }}</h3>
+            <p class="note-content">{{ note.content }}</p>
+
+            <div class="note-card-footer">
+                <div class="note-meta">
+                    <i class="bi bi-calendar3"></i>
+                    <span>{{ note.date }}</span>
+                    <span class="meta-dot">·</span>
+                    <i class="bi bi-clock"></i>
+                    <span>{{ note.time }}</span>
+                </div>
+                <a href="/delete/{{ loop.index0 }}" class="btn-delete" onclick="return confirm('Delete this note?')">
+                    <i class="bi bi-trash3"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="bi bi-journal-x"></i>
+        </div>
+        <h3>No notes yet</h3>
+        <p>You haven't created any notes. Start by adding your first one!</p>
+        <a href="/" class="btn-save" style="display:inline-flex; margin-top: 1rem;">
+            <i class="bi bi-plus-circle"></i> Create First Note
+        </a>
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}

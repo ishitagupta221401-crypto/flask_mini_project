@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Create Note{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="hero-content">
+        <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            Python Flask Web Application
+        </div>
+        <h1 class="hero-title">
+            Capture Every<br>
+            <span class="title-gradient">Brilliant Idea</span>
+        </h1>
+        <p class="hero-subtitle">
+            A full-stack notes app built with Flask routing, Jinja2 templates,<br>
+            GET & POST form handling, and live CRUD operations.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-pill">
+                <i class="bi bi-journal-check"></i>
+                <span>{{ note_count }} Note{{ 's' if note_count != 1 else '' }} Saved</span>
+            </div>
+            <div class="stat-pill">
+                <i class="bi bi-code-slash"></i>
+                <span>Flask + Python</span>
+            </div>
+            <div class="stat-pill">
+                <i class="bi bi-layers"></i>
+                <span>Full CRUD</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="form-section">
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-header-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <div>
+                <h2 class="form-card-title">New Note</h2>
+                <p class="form-card-subtitle">Fill in the details and save your note instantly</p>
+            </div>
+        </div>
+
+        <form method="POST" action="/">
+            <div class="form-group-custom">
+                <label class="form-label-custom">
+                    <i class="bi bi-type"></i> Title
+                </label>
+                <input
+                    type="text"
+                    name="title"
+                    class="input-custom"
+                    placeholder="e.g. Python Revision Notes"
+                    required
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="form-group-custom">
+                <label class="form-label-custom">
+                    <i class="bi bi-tag"></i> Category
+                </label>
+                <div class="select-wrapper">
+                    <select name="category" class="input-custom select-custom">
+                        <option value="General">📝 General</option>
+                        <option value="Study">📚 Study</option>
+                        <option value="Work">💼 Work</option>
+                        <option value="Ideas">💡 Ideas</option>
+                        <option value="Personal">🧠 Personal</option>
+                    </select>
+                    <i class="bi bi-chevron-down select-arrow"></i>
+                </div>
+            </div>
+
+            <div class="form-group-custom">
+                <label class="form-label-custom">
+                    <i class="bi bi-text-paragraph"></i> Content
+                </label>
+                <textarea
+                    name="content"
+                    class="input-custom textarea-custom"
+                    placeholder="Write your note content here..."
+                    rows="5"
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit" class="btn-save">
+                <i class="bi bi-check2-circle"></i>
+                Save Note
+                <span class="btn-arrow"><i class="bi bi-arrow-right"></i></span>
+            </button>
+        </form>
+    </div>
+
+    <div class="info-panel">
+        <div class="info-card">
+            <div class="info-icon-wrap purple">
+                <i class="bi bi-diagram-3"></i>
+            </div>
+            <h4>Flask Routing</h4>
+            <p>Multiple routes handle different pages: <code>/</code>, <code>/notes</code>, <code>/delete</code></p>
+        </div>
+        <div class="info-card">
+            <div class="info-icon-wrap blue">
+                <i class="bi bi-arrow-left-right"></i>
+            </div>
+            <h4>GET & POST</h4>
+            <p>This form uses <code>POST</code> to send data. The notes page uses <code>GET</code> to display them.</p>
+        </div>
+        <div class="info-card">
+            <div class="info-icon-wrap green">
+                <i class="bi bi-database-check"></i>
+            </div>
+            <h4>CRUD Operations</h4>
+            <p>Create notes via form. Read them on the notes page. Delete any note instantly.</p>
+        </div>
+        <div class="info-card">
+            <div class="info-icon-wrap orange">
+                <i class="bi bi-layout-text-window"></i>
+            </div>
+            <h4>Jinja2 Templates</h4>
+            <p>All pages extend <code>base.html</code> using template inheritance for clean structure.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

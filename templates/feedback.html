@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block title %}Reviews & Feedback{% endblock %}
+
+{% block content %}
+
+{% if submitted %}
+<div class="submit-success">
+    <div class="success-icon"><i class="bi bi-patch-check-fill"></i></div>
+    <div>
+        <strong>Review submitted!</strong>
+        <span>Thank you — your feedback has been recorded and the owner has been notified.</span>
+    </div>
+</div>
+{% endif %}
+
+<section class="page-header">
+    <div class="page-header-inner">
+        <div>
+            <div class="hero-eyebrow">
+                <span class="eyebrow-dot"></span>
+                Community Feedback
+            </div>
+            <h1 class="page-title">
+                Reviews
+                <span class="count-badge">{{ reviews|length }}</span>
+            </h1>
+            <p class="page-subtitle">Share your experience with NoteFlow. Your feedback helps us improve.</p>
+        </div>
+        {% if reviews %}
+        <div class="avg-rating-display">
+            <div class="avg-number">{{ avg }}</div>
+            <div class="avg-right">
+                <div class="avg-stars">
+                    {% for i in range(1, 6) %}
+                    <i class="bi bi-star{% if i <= avg|int %}-fill{% elif (avg - avg|int) >= 0.5 and i == avg|int + 1 %}-half{% endif %}"></i>
+                    {% endfor %}
+                </div>
+                <span class="avg-label">{{ reviews|length }} review{{ 's' if reviews|length != 1 else '' }}</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<div class="feedback-layout">
+
+    <div class="feedback-form-wrap">
+        <div class="form-card">
+            <div class="form-card-header">
+                <div class="form-header-icon">
+                    <i class="bi bi-chat-heart"></i>
+                </div>
+                <div>
+                    <h2 class="form-card-title">Leave a Review</h2>
+                    <p class="form-card-subtitle">Rate your experience and share your thoughts</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/feedback">
+                <div class="form-group-custom">
+                    <label class="form-label-custom"><i class="bi bi-person"></i> Your Name</label>
+                    <input type="text" name="name" class="input-custom" placeholder="e.g. Rahul Sharma" required autocomplete="off">
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom"><i class="bi bi-envelope"></i> Email <span class="optional-tag">optional</span></label>
+                    <input type="email" name="email" class="input-custom" placeholder="your@email.com" autocomplete="off">
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom"><i class="bi bi-star"></i> Rating</label>
+                    <div class="star-selector">
+                        {% for i in range(1, 6) %}
+                        <input type="radio" name="stars" id="star{{ i }}" value="{{ i }}" {% if i == 5 %}checked{% endif %}>
+                        <label for="star{{ i }}" class="star-label" title="{{ i }} star{{ 's' if i != 1 else '' }}">
+                            <i class="bi bi-star-fill"></i>
+                        </label>
+                        {% endfor %}
+                        <span class="star-hint" id="starHint">Excellent</span>
+                    </div>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom"><i class="bi bi-chat-text"></i> Your Feedback</label>
+                    <textarea name="message" class="input-custom textarea-custom" rows="4"
+                        placeholder="Tell us what you think about NoteFlow..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-save">
+                    <i class="bi bi-send-fill"></i>
+                    Submit Review
+                    <span class="btn-arrow"><i class="bi bi-arrow-right"></i></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="reviews-list-wrap">
+        {% if reviews %}
+            {% for review in reviews|reverse %}
+            <div class="review-card" style="--delay: {{ loop.index0 * 0.07 }}s">
+                <div class="review-card-top">
+                    <div class="reviewer-avatar">{{ review.name[0]|upper }}</div>
+                    <div class="reviewer-info">
+                        <strong class="reviewer-name">{{ review.name }}</strong>
+                        {% if review.email %}
+                        <span class="reviewer-email">{{ review.email }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="review-stars">
+                        {% for i in range(1, 6) %}
+                        <i class="bi bi-star{% if i <= review.stars %}-fill{% endif %} {% if i <= review.stars %}star-filled{% else %}star-empty{% endif %}"></i>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="review-message">{{ review.message }}</p>
+                <div class="review-footer">
+                    <span class="review-date">
+                        <i class="bi bi-calendar3"></i> {{ review.date }}
+                        <span class="meta-dot">·</span>
+                        <i class="bi bi-clock"></i> {{ review.time }}
+                    </span>
+                    {% if not review.read %}
+                    <span class="new-badge"><i class="bi bi-circle-fill"></i> New</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state" style="padding: 4rem 1rem;">
+            <div class="empty-icon"><i class="bi bi-chat-square-heart"></i></div>
+            <h3>No reviews yet</h3>
+            <p>Be the first to share your experience with NoteFlow!</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+const hints = ['Terrible','Poor','Average','Good','Excellent'];
+document.querySelectorAll('input[name="stars"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        document.getElementById('starHint').textContent = hints[radio.value - 1];
+    });
+});
+</script>
+{% endblock %}
