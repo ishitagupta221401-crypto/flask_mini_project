@@ -44,11 +44,17 @@
         {% for review in reviews|reverse %}
         <div class="notif-card" style="--delay: {{ loop.index0 * 0.06 }}s">
             <div class="notif-left">
-                <div class="reviewer-avatar big">{{ review.name[0]|upper }}</div>
+                <div class="reviewer-avatar big" style="background: {{ review.avatar_color }}; box-shadow: 0 0 12px {{ review.avatar_color }}66;">
+                    {{ review.name[0]|upper }}
+                </div>
             </div>
             <div class="notif-body">
                 <div class="notif-header-row">
                     <span class="reviewer-name">{{ review.name }}</span>
+                    <span class="reviewer-id-badge">{{ review.reviewer_id }}</span>
+                    {% if review.visit_number and review.visit_number > 1 %}
+                    <span class="returning-badge"><i class="bi bi-arrow-repeat"></i> #{{ review.visit_number }} visit</span>
+                    {% endif %}
                     {% if review.email %}
                     <span class="reviewer-email">{{ review.email }}</span>
                     {% endif %}
